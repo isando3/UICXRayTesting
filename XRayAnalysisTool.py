@@ -97,7 +97,7 @@ argv = []
 # \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ 
 
 #Comments on get_gpeaks: To get rid of the polymarkers of the Spectrum method, use the option ='goff' in the search function
-def get_gpeaks(h,lrange=[0,300],sigma=6,opt="goff",thres=0.05,niter=1000):
+def get_gpeaks(h,lrange=[20,300],sigma=6,opt="goff",thres=0.05,niter=1000):
     s = TSpectrum(niter,1)
     h.GetXaxis().SetRange(lrange[0],lrange[1])
     s.Search(h,sigma,opt,thres)
@@ -170,7 +170,7 @@ def FitPeaks(rootfile,histo,material,rocs,output,XRSource,rebin):
         print "Opening file:"+ hist
         tgt.Rebin(rebin)
         tgt.Draw()
-        tgt.GetXaxis().SetRange(0,300)
+        tgt.GetXaxis().SetRange(20,300)
         peaks = get_gpeaks(tgt)
         print len(peaks), "Roc: ", i, material
         if len(peaks)==0:
@@ -337,7 +337,7 @@ def PlotSameNStats(arrayfithisto1, arrayfithisto2, arrayfithisto3, arrayfithisto
             continue 
         else: 
             fithisto1 = arrayfithisto1[i]
-            fithisto1.GetXaxis().SetRange(0,300)
+            fithisto1.GetXaxis().SetRange(20,300)
             fithisto1.SetLineColor(kBlue)
             mu1f = fithisto1.GetFunction("gaus2").GetParameter(1)
             sigma1f = fithisto1.GetFunction("gaus2").GetParameter(2)
@@ -349,7 +349,7 @@ def PlotSameNStats(arrayfithisto1, arrayfithisto2, arrayfithisto3, arrayfithisto
             continue
         else: 
             fithisto2 = arrayfithisto2[i]
-            fithisto2.GetXaxis().SetRange(0,300)
+            fithisto2.GetXaxis().SetRange(20,300)
             fithisto2.SetLineColor(kMagenta)
             mu2f = fithisto2.GetFunction("gaus2").GetParameter(1)
             sigma2f = fithisto2.GetFunction("gaus2").GetParameter(2)
@@ -361,7 +361,7 @@ def PlotSameNStats(arrayfithisto1, arrayfithisto2, arrayfithisto3, arrayfithisto
             height.append(0)
         else:
             fithisto3 = arrayfithisto3[i]
-            fithisto3.GetXaxis().SetRange(0,300)
+            fithisto3.GetXaxis().SetRange(20,300)
             fithisto3.SetLineColor(kGreen)
             mu3f = fithisto3.GetFunction("gaus2").GetParameter(1)
             sigma3f = fithisto3.GetFunction("gaus2").GetParameter(2)
@@ -373,7 +373,7 @@ def PlotSameNStats(arrayfithisto1, arrayfithisto2, arrayfithisto3, arrayfithisto
             height.append(0) 
         else:
             fithisto4 = arrayfithisto4[i]
-            fithisto4.GetXaxis().SetRange(0,300)
+            fithisto4.GetXaxis().SetRange(20,300)
             fithisto4.SetLineColor(kOrange)    
             mu4f = fithisto4.GetFunction("gaus2").GetParameter(1)
             sigma4f = fithisto4.GetFunction("gaus2").GetParameter(2)
@@ -786,7 +786,7 @@ def ConversionPlot(rocs,output, XRSource):
     c3.Update()
     slopeh.GetXaxis().SetTitle("p1[Vcal/No.Ele]")
     slopeh.GetYaxis().SetTitle("Entries")
-    gStyle.SetOptStat(0)
+    gStyle.SetOptStat(1)
     slopeh.Draw()
     c3.Update()
     c3.SaveAs(output+'Distribution_Slope.png')
