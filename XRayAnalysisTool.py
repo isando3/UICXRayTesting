@@ -85,7 +85,7 @@ parser.add_option('--nrocs', type='int', action='store',
                   dest='nrocs',
                   help='Number or rocs')
 parser.add_option('--badrocs', type='string', action='store',
-                  default='',
+                  default='17',
                   dest='badrocs',
                   help='List of bad rocs, for example [2,4,5]')
 (options, args) = parser.parse_args()
@@ -818,11 +818,16 @@ histname = options.histoname
 nrocs = options.nrocs
 Badrocs = options.badrocs
 badrocs = Badrocs.split(',')
-badrocs = [int(x) for x in badrocs]    
+if badrocs[0]=='17':
+    badrocsFlag= False
+else:
+    badrocs = [int(x) for x in badrocs]
+    badrocsFlag = True  
 print 'Removing the following ROCs', badrocs
 rocs = range(0,16)
-for x in badrocs:
-    rocs.remove(x)
+if badrocsFlag:
+    for x in badrocs:
+        rocs.remove(x)
 output = options.outputfile
 material2 = 'Ag'
 material3 = 'Sn'
