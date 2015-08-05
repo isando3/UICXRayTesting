@@ -25,7 +25,7 @@ parser.add_option('--HRinputfile', type='string', action='store',
                   dest='HRinputfile',
                   help='Name of the log  file to be used for the HighRate summary, use the log file after you run the HR tests')
 parser.add_option('--badrocs', type='string', action='store',
-                  default='',
+                  default='17',
                   dest='badrocs',
                   help='List of bad rocs, for example [2,4,5]')
 (options, args) = parser.parse_args()
@@ -36,9 +36,14 @@ argv = []
 rocs = range(0,16)
 Badrocs = options.badrocs
 badrocs = Badrocs.split(',')
-badrocs = [int(x) for x in badrocs]   
-for x in badrocs:
-    rocs.remove(x)
+print badrocs[0] 
+if badrocs[0] == '17':
+    print 'no bad rocs'
+else:
+    badrocs = [int(x) for x in badrocs]   
+    for x in badrocs:
+        rocs.remove(x)
+print 'Analyzing rocs:', rocs
 f = TFile(options.outputfile, 'recreate')
 slope_hist = TH1F('Ele/Vcal', 'Ele/Vcal', 16,0,16)
 offset_hist = TH1F('Offset','Offset', 16,0,16)
@@ -51,15 +56,16 @@ for l in range(0,len(line)):
     offset = float(values[1].strip('\n'))
     slope_hist.SetBinContent(l+1,slope)
     slope_hist.GetXaxis().SetBinLabel(l+1,'ROC'+str(l))
-    offset_hist.SetBinContent(l,offset)
+    offset_hist.SetBinContent(l+1,offset)
     offset_hist.GetXaxis().SetBinLabel(l+1,'ROC'+str(l))
 slope_hist.Draw()
 #f.Write()
 offset_hist.Draw()
 #f.Write()
 for i in rocs:
+    print 'Analyzing Roc:', i
     cumeans = []
-    for file in  glob.glob('*'+str(i)+'_stats.txt'):
+    for file in  glob.glob('*'+'C_'+str(i)+'_stats.txt'):
         name = os.path.splitext(file)[0]
         print 'Opening:', name
         if ('MoC' in name):
@@ -77,6 +83,7 @@ for i in rocs:
                     words =  re.split(':\t',stat_line[j])
                     meancu = words[1].strip('\n')
                     cumeans.append(float(meancu))
+                print cumeans
         elif ('AgC' in name):
             stat_file = open(file, 'r')
             stat_line = stat_file.readlines()
@@ -91,6 +98,7 @@ for i in rocs:
                     words =  re.split(':\t',stat_line[j])
                     meancu = words[1].strip('\n')
                     cumeans.append(float(meancu))
+                print cumeans
         elif ('InC' in name):
             stat_file = open(file, 'r')
             stat_line = stat_file.readlines()
@@ -119,6 +127,7 @@ for i in rocs:
                     words =  re.split(':\t',stat_line[j])
                     meancu = words[1].strip('\n')
                     cumeans.append(float(meancu))
+        print cumeans
         cu = sum(cumeans)/len(cumeans)
         means_hist.SetBinContent(i+1,1,cu)
         means_hist.GetXaxis().SetBinLabel(i+1,'ROC'+str(i))
