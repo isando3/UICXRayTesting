@@ -162,11 +162,21 @@ for l in range(0,len(lines)):
         for fluxvalue in fluxwords:
             fluxvalues.append(float(fluxvalue))   
     elif bbstring in lines[l]:
-        bbwords = lines[l].rsplit('   ')
+        bbwords = lines[l].rsplit('  ')
         bbwords.pop(0)
         bbwords.pop(0)
         roc= 0
+        print bbwords, len(bbwords)
+        for i in range (1,17):
+            print i, bbwords[i]
+            try:
+                float(bbwords[i])
+                print bbwords[i]
+            except ValueError:
+                print 'Exception:', bbwords[i]
+                bbwords.pop(i)
         print bbwords
+        bbwords.pop(0)
         for bbvalue in bbwords:
             bb_hist.SetBinContent(roc+1,float(bbvalue))
             bb_hist.GetXaxis().SetBinLabel(roc+1,'ROC'+str(roc))
