@@ -27,7 +27,7 @@ from ROOT import *
 #|_| 
 #
 
-myfilename = ".root"
+myfilename = ".root" #"_pa225_090915.root"
 myfileoutname = "XRFResult_"
 
 parser.add_option('--setup', type='string', action='store',
@@ -149,6 +149,7 @@ def FitPeaks(rootfile,histo,material,rocs,output,XRSource,rebin):
     elif material == 'Cu':
         arrayCu = true
         ArrayCu = TObjArray(16)
+    #for i in range(0,int(nrocs)-1):
     for i in range(0,16):
         if i not in rocs:
             print 'Skipping roc', i
@@ -165,6 +166,9 @@ def FitPeaks(rootfile,histo,material,rocs,output,XRSource,rebin):
         print hist, hist.strip('Xray/')
         if hist.strip('Xray/') in allkeys:
             print 'FoilandRoc found:', hist
+         #if  hist not in key.GetName():
+                #print 'Target foil not found'
+                #continue
         else:
             print 'Histogram needed not  found'
             continue   
@@ -737,6 +741,7 @@ def ConversionPlot(rocs,badrocs,output, XRSource):
             title = "Graph eV vs Vcal for ROC " + str(i) + " "
             gr.SetTitle( title )
             n_o = gr.GetFunction("fit").GetParameter(0)
+            #n_o_er = gr.GetFunction("fit").GetParameter(1)
             n_o_er = gr.GetFunction("fit").GetParError(0)
             print "no:",n_o
             slope = gr.GetFunction("fit").GetParameter(1)
@@ -765,6 +770,10 @@ def ConversionPlot(rocs,badrocs,output, XRSource):
             gStyle.SetOptFit(0)
             gr.Draw("AP")
             gStyle.SetOptFit(0)
+            #ps = c1.FindObject("Graph").FindObject("stats")
+            #ps.SetX1NDC(0.15)
+            #ps.SetX2NDC(0.55)
+            #gStyle.SetOptStat(0)
             c1.SetGrid()
             textslope = TLatex()
             textslope.SetNDC()
@@ -772,8 +781,10 @@ def ConversionPlot(rocs,badrocs,output, XRSource):
             textslope.SetTextSize(0.05)
             textslope.DrawLatex(0.15,0.9,title)
             textslope.DrawLatex(0.15,0.8,"e^{-}/Vcal: "+ '{0:.2}'.format(pslope) + " \pm " + '{0:.1}'.format(pslope_err) +" Intercept: " + '{0:.2}'.format(pn_o) + " \pm " + '{0:.2}'.format(pn_o_er))
+            #textslope.DrawLatex(0.2,0.8,"e^{-}/Vcal:"+ '{:.4}'.format(1./slope) + " +/- " + '{:.4}'.format((slope_err)/pow(slope,2)))
             textslope.DrawLatex(0.15,0.7,"#chi^{2}/ndf = " + '{:.4}'.format(chisquare/ndf))
             textslope.DrawLatex(0.2,0.2,"  Cu                            Mo               Ag   In   Sn")
+            #textslope.DrawLatex(0.1,0.91,"ROC "+str(i))
             gStyle.SetOptFit(0)
             c1.Update()
             gStyle.SetOptFit(0)

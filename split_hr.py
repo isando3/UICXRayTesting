@@ -15,8 +15,12 @@ for version in range(3):
   version==0
 
   if version==0: current="0"+str(5)
+  #if version==0: flux=str(40)
   elif version==1: current=str(10)
+  #elif version==1: flux=str(80)
   else: current=str(15)
+  #else: flux=str(120)
+  #f1 = TFile('hrEff_'+flux.root)
   f1=TFile(inputfile+"hr"+str(current)+"ma_"+moduleName+"_"+date+".root","RECREATE")
   d1=f1.mkdir("HighRate")
   d1.cd()

@@ -51,22 +51,22 @@ def attachName(parent):
 def analyze(inputFile, outputDir):
 
 
-    slope = range(16) 
-    offset = range(16)
+    #slope = range(16) 
+    #offset = range(16)
     low_eff_hr = range(16)
     low_eff_lr = range(16)
     unif_high = range(16)
     unif_low = range(16)
 
-    qfile = open("SummaryQPlots_"+inputFile+".txt",'r')
+    #qfile = open("SummaryQPlots_"+inputFile+".txt",'r')
     #qfile = open("SummaryQplots.txt")
-    line = qfile.readlines()
-    for l in range(2,len(line)):
-       values = string.split(line[l])
-       slope[l-2] = values[1]+values[2]+values[3]
-       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
-       slope[l-2] = float(values[1])
-       offset[l-2] = float(values[4])
+    #line = qfile.readlines()
+    #for l in range(2,len(line)):
+       #values = string.split(line[l])
+#       slope[l-2] = values[1]+values[2]+values[3]
+#       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
+       #slope[l-2] = float(values[1])
+       #offset[l-2] = float(values[4])
     
     low98 = []
     low95 = []
@@ -132,10 +132,10 @@ def analyze(inputFile, outputDir):
         roc=SE(rocs, 'ROC')
         position=SE(roc, 'POSITION')
         position.text=str(i)
-        xray_offset=SE(roc, 'XRAY_OFFSET')
-        xray_offset.text=str(offset[i])
-        xray_slope=SE(roc, 'XRAY_SLOPE')
-        xray_slope.text=str(slope[i])
+        #xray_offset=SE(roc, 'XRAY_OFFSET')
+        #xray_offset.text=str(offset[i])
+        #xray_slope=SE(roc, 'XRAY_SLOPE')
+        #xray_slope.text=str(slope[i])
         xray_low_eff_hr=SE(roc, 'LOW_DC_HIGHRATE_EFF')
         xray_low_eff_hr.text=str(round(low_eff_hr[i],3))
         xray_low_eff_lr=SE(roc,'LOW_DC_LOWRATE_EFF')
@@ -145,13 +145,13 @@ def analyze(inputFile, outputDir):
         xray_unif_high=SE(roc,'HIGH_DC_UNI')
         xray_unif_high.text=str(round(unif_high[i],3))
 
-    for i in range(16):
-    	pic=SE(top, 'PIC')
-    	attachName(pic)
-    	file=SE(pic, 'FILE')
-    	file.text='Qplot_'+inputFile+'_C' + str(i) +'.png'
-        part=SE(pic,'PART')
-        part.text='sidet_p'
+    #for i in range(16):
+    	#pic=SE(top, 'PIC')
+    	#attachName(pic)
+    	#file=SE(pic, 'FILE')
+    	#file.text='Qplot_'+inputFile+'_C' + str(i) +'.png'
+        #part=SE(pic,'PART')
+        #part.text='sidet_p'
 
     pic=SE(top, 'PIC')
     attachName(pic)
@@ -209,7 +209,7 @@ def makeXML(inputFile):
     os.system ("cp %s %s" % ("Results_Hr_DC_Uniformity_"+inputFile+ ".png", outputDir))
     os.system ("cp %s %s" % ("Results_Hr_Eff_"+inputFile+ ".png", outputDir))
     os.system ("cp %s %s" % ("Results_Hr_Rate*.png", outputDir))
-    os.system ("cp %s %s" % ("Qplot_*.png", outputDir))
+    #os.system ("cp %s %s" % ("Qplot_*.png", outputDir))
 
     os.chdir(outputDir)
     zip=zipfile.ZipFile('../'+moduleName+'.zip', mode='w')

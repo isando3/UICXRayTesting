@@ -10,6 +10,7 @@ f=TFile(inputpath+"/highrate.root","OPEN")
 ##########################Highrate##################################
 
 f1=TFile(inputpath+"/dc05_"+moduleName+"_"+date+".root","RECREATE")  
+#f1= TFile(inputpath+"/hrData_40.root","RECREATE")
 d1=f1.mkdir("Xray")
 d1.cd()
 for i in range(16):

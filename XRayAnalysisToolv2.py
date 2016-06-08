@@ -26,10 +26,6 @@ from ROOT import *
 #| |                             
 #|_| 
 #
-
-myfilename = ".root" #"_pa225_090915.root"
-myfileoutname = "XRFResult_"
-
 parser.add_option('--setup', type='string', action='store',
                   default='UIC',
                   dest='setup',
@@ -481,12 +477,12 @@ def ConversionPlot(rocs,output, XRSource):
     convfactsn= 25271/3.6
     convfactin = 24207/3.6
     sumoutfile = "SummaryQPlots_" + output + ".txt"
-    sumout = open(sumoutfile, "w")
-    sumout.write(myfileoutname + "Summary of QPlots Slopes.\n"+ " e^{-}/Vcal: Intercept: \n" )
+    sumout = open( sumoutfile, "w" )
+    sumout.write( myfileoutname + " Summury of QPlots Slopes.\n" +  "      e^{-}/Vcal:    Intercept: \n" )
     qplotfit = open("SummaryQplots.txt",'w')
     n_oh = TH1F('n_oh','N_o', 100,0,1000)
     slopeh = TH1F('Slope','Slope',100, 0,100)
-    qmatrix = np.zeros((16,5))
+    qmatrix = np.zeros((16,2))
     for i in rocs:
         mu_cu =[]
         sig_cu=[]
@@ -733,23 +729,13 @@ def ConversionPlot(rocs,output, XRSource):
         gr.Fit("fit","w","l",1000,10000)
         gr.SetMarkerStyle(20)
         n_o = gr.GetFunction("fit").GetParameter(0)
-        n_o_er = gr.GetFunction("fit").GetParameter(1)
+        n_o_err = gr.GetFunction("fit").GetParError(0)
         print "no:",n_o
         slope = gr.GetFunction("fit").GetParameter(1)
-        slope_err = gr.GetFunction("fit").GetParError(1) 
-        print "slope:",slope
-        pn_o = -(n_o/slope)
-        pn_o_er =abs(n_o_er/slope)
-        pslope = 1/slope
         slope_err = gr.GetFunction("fit").GetParError(1)
-        pslope_err = slope_err /( slope*slope)
-        chisquare = gr.GetFunction("fit").GetChisquare()
-        ndf = gr.GetFunction("fit").GetNDF()
-        print "no:",pn_o
-        print "no error:", pn_o_er
-        print "slope:",pslope
-        print "slope error:",pslope_err
-        sumout.write( "C_" + str(i) + " "+ '{0:.2}'.format(pslope) + " +/- " + '{0:.1}'.format(pslope_err) +" " + '{0:.2}'.format(pn_o) + " +/- " + '{0:.2}'.format(pn_o_er)+ '\n' )
+        sumout.write( "C_" + str(i) + "  "+ '{0:.2}'.format(1/slope) + " +/- " + '{0:.1}'.format((slope_err)/pow(slope,2)) + 
+                        "        " + '{0:.2}'.format(-n_o/slope) + " +/- " + '{0:.2}'.format(abs(n_o_err/slope))+ '\n' ) 
+        print "slope:",slope
         gStyle.SetOptFit(0)
         gr.Draw("AP")
         gr.GetYaxis().SetRange(0,300)
@@ -771,8 +757,6 @@ def ConversionPlot(rocs,output, XRSource):
         textslope.SetTextColor(kBlack)
         textslope.SetTextSize(0.05)
         textslope.DrawLatex(0.2,0.8,"e^{-}/Vcal:"+ '{:.4}'.format(1./slope) + " +/- " + '{:.4}'.format((slope_err)/pow(slope,2)))
-        textslope.DrawLatex(0.2,0.75,"#chi^{2}/ndf = " + '{:.4}'.format(chisquare/ndf))
-        textslope.DrawLatex(0.1,0.91,"ROC "+str(i))
         gStyle.SetOptFit(0)
         c1.Update()
         gStyle.SetOptFit(0)
@@ -787,16 +771,8 @@ def ConversionPlot(rocs,output, XRSource):
         slopeh.Fill(1/slope)
         qmatrix[i][0] = 1/slope
         qmatrix[i][1] = -n_o/slope
-        qmatrix[i][2] = chisquare
-        qmatrix[i][3] = ndf
-        qmatrix[i][4] = slope_err/pow(slope,2)
     	# Create SummaryQPlots txt file:
     np.savetxt("SummaryDistributionTable"+'_'+output+'_'+".txt",qmatrix, delimiter="\t", fmt="%s", newline='\n' )
-    FormattedFile = open("FluorescenceFormattedOutput.txt", "w")
-    FormattedFile.write("Roc Number    Slope (e-/Vcal)     Offset (Vcal)    Chi2/NDf\n")
-    for iroc in rocs:
-        FormattedFile.write("ROC "+str(iroc)+"         "+str(round(qmatrix[iroc][0],2))+" +/- "+str(round(qmatrix[iroc][4],4))+"       "+str(int(round(qmatrix[iroc][1])))+"             "+str(round(qmatrix[iroc][2]/qmatrix[iroc][3],4))+"\n")
-    FormattedFile.close()
     c2 = TCanvas('c2',"Distribution N_o",1)
     c2.cd()
     gStyle.SetOptStat(1)

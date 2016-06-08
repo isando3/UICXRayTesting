@@ -94,7 +94,6 @@ read c
 done
 
 
-
 echo Start doing the Fluorescence testing
 
 python ~/elComandante/xrayClient/UIC_stepper_v2.py Ag                         
@@ -131,7 +130,7 @@ done
 
 
 #####################Database#################################################
-#echo Please check the Fluorescence results "in" the browser
+echo Please check the Fluorescence results "in" the browser
 echo "Type TBrowser r in the terminal" 
 
 root ${inputpath}/Fluorescence.root
@@ -142,33 +141,10 @@ read badRocs
 
 #~/RunAllScripts.sh ${moduleName} ${inputpath} ${badRocs}
 
-#cp Fluorescence.root ${inputpath}
-~/RunAllScripts_HR_FL.sh ${moduleName} ${inputpath}  ${date} ${badrocs}
-#rm ${inputpath}/Fluorescence.root
+cp Fluorescence.root ${inputpath}
+~/RunAllScripts.sh ${moduleName} ${inputpath} 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+rm ${inputpath}/Fluorescence.root
 
-echo Did you submit the results to lessweb and moreweb? "(y/n)"
-c=0
-while [ $c != y ]
-do
-sleep 1
-read c
-done
-
-echo Did you change the status on lessweb "(y/n)"
-c=0
-while [ $c != y ]
-do
-sleep 1
-read c
-done
-
-echo Did you put the sticker on the bag? "(y/n)"
-c=0
-while [ $c != y ]
-do
-sleep 1
-read c
-done
 
 echo This is the end, my friend
 echo Here are all the results you need: ~/FPIX_ProductionMode/XRayTesting/${moduleName}/DataBase

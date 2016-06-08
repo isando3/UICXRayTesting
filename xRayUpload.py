@@ -53,78 +53,22 @@ def analyze(inputFile, outputDir):
 
     slope = range(16) 
     offset = range(16)
-    low_eff_hr = range(16)
-    low_eff_lr = range(16)
-    unif_high = range(16)
-    unif_low = range(16)
 
     qfile = open("SummaryQPlots_"+inputFile+".txt",'r')
     #qfile = open("SummaryQplots.txt")
     line = qfile.readlines()
     for l in range(2,len(line)):
        values = string.split(line[l])
-       slope[l-2] = values[1]+values[2]+values[3]
-       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
+#       slope[l-2] = values[1]+values[2]+values[3]
+#       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
        slope[l-2] = float(values[1])
        offset[l-2] = float(values[4])
-    
-    low98 = []
-    low95 = []
-    eff_unif_file = open('hrEfficiency.log', 'r')
-    eff_unif_lines = eff_unif_file.readlines()
-    for line in eff_unif_lines:
-        for i in xrange(0,16):
-            if 'Lowesest DC Eff at High Rate for  ROC:'+str(i) in line:
-                words_low_eff_hr = string.split(line)
-                low_eff_hr[i] = float(words_low_eff_hr[11])
-                  
-            elif 'Lowest DC Eff at Low Rate for  ROC:'+str(i) in line:
-                words_low_eff_lr = string.split(line)
-                low_eff_lr[i] = float(words_low_eff_lr[11])
-            elif 'Highest  DC Uni  for  ROC:'+str(i) in line:
-                words_unif_high = string.split(line)
-                unif_high[i] = float(words_unif_high[8])
-            elif 'Lowest DC Uni for  ROC:'+str(i) in line:
-                words_unif_low = string.split(line)
-                unif_low[i] = float(words_unif_low[8])
-        if 'Number DC <= 98% :' in line:
-            print line
-            n98s =string.split(line)[5]
-            print n98s
-            n98 = n98s.replace(':','')     
-        elif 'Number DC <= 95% :' in line:
-            print line
-            n95s =string.split(line)[5]
-            print n95s
-            n95 = n95s.replace(':','')
-        elif 'Number DC >= 1.5 :' in line:
-            print line  
-            n15 = string.split(line)[5]
-            print n15
-            n1p5 = n15.replace(':','') 
-        elif 'Number DC <  0.6 :' in line: 
-            print line
-            n06 = string.split(line)[5]
-            print n06
-            n0p6 = n06.replace(':','')
+
     testtime = SE(top, 'TIME')
     testtime.text = str(datetime.now()) 
-  
-
 
     test = SE(top, 'TEST')
     attachName(test)
-    
-    n98val = SE(test,'DC_BELOW_98')
-    n98val.text=str(n98)
-    n95val = SE(test,'DC_BELOW_95')
-    n95val.text=str(n95)
-    n1p5val = SE(test,'DC_ABOVE_150_UNI')
-    n1p5val.text=str(n1p5)
-    n0p6val = SE(test,'DC_BELOW_60_UNI')
-    n0p6val.text=str(n0p6)
-    xraytested = SE(test,'XRAY_TESTED')
-    xraytested.text=str(1)
 
     rocs=SE(test, 'ROCS')
 
@@ -136,14 +80,6 @@ def analyze(inputFile, outputDir):
         xray_offset.text=str(offset[i])
         xray_slope=SE(roc, 'XRAY_SLOPE')
         xray_slope.text=str(slope[i])
-        xray_low_eff_hr=SE(roc, 'LOW_DC_HIGHRATE_EFF')
-        xray_low_eff_hr.text=str(round(low_eff_hr[i],3))
-        xray_low_eff_lr=SE(roc,'LOW_DC_LOWRATE_EFF')
-        xray_low_eff_lr.text=str(round(low_eff_lr[i],3))
-        xray_unif_low=SE(roc,'LOW_DC_UNI')
-        xray_unif_low.text=str(round(unif_low[i],3))
-        xray_unif_high=SE(roc,'HIGH_DC_UNI')
-        xray_unif_high.text=str(round(unif_high[i],3))
 
     for i in range(16):
     	pic=SE(top, 'PIC')
@@ -164,13 +100,6 @@ def analyze(inputFile, outputDir):
     attachName(pic)
     file=SE(pic, 'FILE')
     file.text='Results_Hr_Rate_by_DCol_'+inputFile+'.png'
-    part=SE(pic,'PART')
-    part.text='sidet_p'
-    
-    pic=SE(top, 'PIC')
-    attachName(pic)
-    file=SE(pic, 'FILE')
-    file.text='Results_Hr_DC_Uniformity_'+inputFile+'.png'
     part=SE(pic,'PART')
     part.text='sidet_p'
 
@@ -206,7 +135,6 @@ def makeXML(inputFile):
     #print prettify(top)
     #print
 
-    os.system ("cp %s %s" % ("Results_Hr_DC_Uniformity_"+inputFile+ ".png", outputDir))
     os.system ("cp %s %s" % ("Results_Hr_Eff_"+inputFile+ ".png", outputDir))
     os.system ("cp %s %s" % ("Results_Hr_Rate*.png", outputDir))
     os.system ("cp %s %s" % ("Qplot_*.png", outputDir))

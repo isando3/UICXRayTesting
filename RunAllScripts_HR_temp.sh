@@ -6,24 +6,23 @@ cd ~/FPIX_ProductionMode/XRayResults
 #modulename="$1"
 mkdir "$1"
 cd "$1"
-mkdir Fluorescence
+#mkdir Fluorescence
 mkdir HighRate
 mkdir DataBase
 echo "Done creating directories"
-cd Fluorescence
-cp "$2"/Fluorescence.root .
-cp ~/XRayAnalysisTool_UIC_v2.py .
-cp ~/XRayAnalyzingTools/UICXRayTesting/XRayAnalysisTool_UIC.py .
-if [ -z "$4"]
-then python XRayAnalysisTool_UIC_v2.py --outputfile=$1
-else python XRayAnalysisTool_UIC_v2.py --outputfile=$1 --badrocs=$4
-fi
+#cd Fluorescence
+#cp "$2"/Fluorescence.root .
+#cp ~/XRayAnalysisTool_UIC_v2.py .
+#cp ~/XRayAnalyzingTools/UICXRayTesting/XRayAnalysisTool_UIC.py .
+#if [ -z "$3"]
+#then python XRayAnalysisTool_UIC_v2.py --outputfile=$1
+#else python XRayAnalysisTool_UIC_v2.py --outputfile=$1 --badrocs=$3
+#fi
 #sleep 30
-mv Q*_C*.png ../DataBase
-mv SummaryQ*.txt ../DataBase
-echo "Done analyzing fluorescence test and moving files to DB dir"
+#mv Q*_C*.png ../DataBase
+#mv SummaryQ*.txt ../DataBase
+#echo "Done analyzing fluorescence test and moving files to DB dir"
 echo "Now starting the highrate analysis"
-cd ../
 cd HighRate
 pwd
 mkdir "$1"
@@ -55,7 +54,7 @@ cp ~/FPIX_ProductionMode/XRayResults/$1/HighRate/"$1"/"$1"data/Results_Hr_DC_Uni
 cp ~/FPIX_ProductionMode/XRayResults/$1/HighRate/"$1"/"$1"data/Results_Hr_Eff_"$1"* ~/FPIX_ProductionMode/XRayResults/$1/DataBase/
 cp ~/FPIX_ProductionMode/XRayResults/$1/HighRate/"$1"/"$1"data/hrEfficiency.log ~/FPIX_ProductionMode/XRayResults/$1/DataBase/
 cd ~/FPIX_ProductionMode/XRayResults/$1/DataBase/
-cp ~/XRayAnalyzingTools/UICXRayTesting/xRayUploadHR_FL.py xRayUpload.py
+cp ~/XRayAnalyzingTools/UICXRayTesting/xRayUploadHR.py xRayUpload.py
 python xRayUpload.py $1
 echo "Congratulations, the results for the Database for module" $1 "can be found in ~/FPIX_ProductionMode/XRayResults/ Now, please go to the Purdue DB to upload them"
 cd ~/XRayAnalyzingTools/FPIXUtils/MRWxRayConvert/
