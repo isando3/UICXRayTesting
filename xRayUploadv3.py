@@ -63,8 +63,8 @@ def analyze(inputFile, outputDir):
     line = qfile.readlines()
     for l in range(2,len(line)):
        values = string.split(line[l])
-       slope[l-2] = values[1]+values[2]+values[3]
-       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
+#       slope[l-2] = values[1]+values[2]+values[3]
+#       offset[l-2] = values[4]+values[5]+values[6].strip('\n')
        slope[l-2] = float(values[1])
        offset[l-2] = float(values[4])
     
@@ -97,16 +97,6 @@ def analyze(inputFile, outputDir):
             n95s =string.split(line)[5]
             print n95s
             n95 = n95s.replace(':','')
-        elif 'Number DC >= 1.5 :' in line:
-            print line  
-            n15 = string.split(line)[5]
-            print n15
-            n1p5 = n15.replace(':','') 
-        elif 'Number DC <  0.6 :' in line: 
-            print line
-            n06 = string.split(line)[5]
-            print n06
-            n0p6 = n06.replace(':','')
     testtime = SE(top, 'TIME')
     testtime.text = str(datetime.now()) 
   
@@ -119,10 +109,6 @@ def analyze(inputFile, outputDir):
     n98val.text=str(n98)
     n95val = SE(test,'DC_BELOW_95')
     n95val.text=str(n95)
-    n1p5val = SE(test,'DC_ABOVE_150_UNI')
-    n1p5val.text=str(n1p5)
-    n0p6val = SE(test,'DC_BELOW_60_UNI')
-    n0p6val.text=str(n0p6)
     xraytested = SE(test,'XRAY_TESTED')
     xraytested.text=str(1)
 

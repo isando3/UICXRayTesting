@@ -24,7 +24,9 @@
 #include <string>
 #include <numeric>
 
-
+//
+//  Jack W King AAS BA BE(May 2016) 02/26/2016
+//
 
 int eff(){
 
@@ -37,15 +39,25 @@ int eff(){
         char chpath[256];
         getcwd(chpath, 255);
         std::string path = chpath;
-        std::string mod("paxxx");
+        std::string mod("paxxx");//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+        //if( newmod != "" )  mod = newmod;
+        // <<<<<< change folder/module name to run in 
+        //std::string mod("yhc691015sn3p35");
         
         std::string dataPath =  path + "/" + mod + "data";
-
+        //std::string measurementFolder =  mod + "data";
+        //std::string configPath = path + "/" + mod;
         std::string configPath = path;
         std::string HighRateSaveFileName( "Results_Hr" );
-        std::string HighRateFileName( "hr" );
+        std::string HighRateFileName( "hr" );//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+        //if( fileDesg != "" ) HighRateFileName = fileDesg;
         int namelength = HighRateFileName.length();
 
+	// <<<<<<<<<<<<<<<<<<<  change Highrate File name to use
+    	//  assumes something like hr08ma_pa225_082715.root
+    	//  10 or 08 or 06 or 04 or 02 required after hr
+    	//      --   looks for a root file  with "HighRateFileName" followed by 10 or 08 or ect....
+    	//      --   so will parse hr10****.root and hr08**********.root ect...  with above settings
     	std::string moduleName = mod;
 
 	std::string maskFileName("defaultMaskFile.dat");
@@ -121,7 +133,8 @@ int eff(){
         ylist.push_back(0.05);
         ylist.push_back(0.10);
         ylist.push_back(0.15);
-
+       // ylist.push_back(0.15);
+       // ylist.push_back(0.15);
 
 	std::cout << " Declaring vectors" << endl;
 
@@ -134,14 +147,18 @@ int eff(){
 	std::vector< double > hitshigh;
 	std::vector< double > efflow;
 	std::vector< double > effhigh;
-    std::vector< double > DCUni;
-    std::vector< double > DCUniNum;
+        std::vector< double > DCUni;
+        std::vector< double > DCUniNum;
+//      std::vector< std::vector< std::vector< double > > > byAmpEfficiencies;
+//      std::vector< std::vector< std::vector< double > > > byAmpEfficiencyErrors;
+//      std::vector< std::vector< std::vector< double > > > byAmpRates;
+//      std::vector< std::vector< std::vector< double > > > byAmpRateErrors;
 	std::vector< std::vector< std::vector< double > > > dcolHits;
 	std::vector< std::vector< std::vector< double > > > dcolHitErrors;
 	std::vector< std::vector< std::vector< double > > > dcolRates;
-    std::vector< std::vector< std::vector< double > > > dcolRateErrors;
-    std::vector< std::vector< std::vector< double > > > dcolEff;
-    std::vector< std::vector< std::vector< double > > > dcolEffErrors;
+        std::vector< std::vector< std::vector< double > > > dcolRateErrors;
+        std::vector< std::vector< std::vector< double > > > dcolEff;
+        std::vector< std::vector< std::vector< double > > > dcolEffErrors;
 
 	std::vector< std::vector< double > > lineList;
 	std::vector<std::vector<double>> dclineList;	
@@ -173,6 +190,27 @@ int eff(){
 	}
 
 
+//	std::cout << "byamp inits" << endl;
+
+/*	for (int i=0;i<=5;i++){
+		byAmpEfficiencies.push_back(bigempty);
+                byAmpEfficiencyErrors.push_back(bigempty);
+                byAmpRates.push_back(bigempty);
+                byAmpRateErrors.push_back(bigempty);
+	}
+*/
+//	std::cout << "initilizing 2 tier" << endl;
+
+/*	for( int i=0; i<=5; i++){
+		for( int j=0;j<=nRocs;j++){
+                        byAmpEfficiencies[i].push_back(empty);
+                        byAmpEfficiencyErrors[i].push_back(empty);
+                        byAmpRates[i].push_back(empty);
+                        byAmpRateErrors[i].push_back(empty);
+                }
+	}
+*/	
+        //std::cout << "initilizing vectors" << endl;
 
 	for (int i=0;i<=nRocs;i++) {
 		efficiencies.push_back(empty);
@@ -310,6 +348,8 @@ int eff(){
 		if(fileRate == "05") { rateIndex = 0;}
 		else if( fileRate == "10"){ rateIndex = 1;}
 		else if( fileRate == "15"){ rateIndex = 2;}
+	//	else if( fileRate == "15"){ rateIndex = 3;}
+	//	else if( fileRate == "15"){ rateIndex = 4;}
 		else {
 			std::cout << "could not read rate: " << currentRootFile << " .";
 			exit(0);
@@ -564,7 +604,11 @@ int eff(){
 					dcolRates[nRocs][0].push_back(rate);
 					dcolRates[nRocs][1].push_back(dColModCount);		
 			
-				
+//					byAmpEfficiencies[rateIndex][iRoc].push_back(efficiency);
+//                                      byAmpEfficiencyErrors[rateIndex][iRoc].push_back(efficiencyError);
+//                                      byAmpRates[rateIndex][iRoc].push_back(rate);
+//					byAmpRateErrors[rateIndex][iRoc].push_back(rateError);
+					
 					dColModCount++;		
 
 					cout << " finding filtered values" << endl;
